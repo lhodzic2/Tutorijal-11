@@ -18,11 +18,11 @@ public class GeografijaDAO {
             e.printStackTrace();
         }
         try {
-            dajGlavniGrad = conn.prepareStatement("SELECT grad.id,grad.naziv,grad.broj_stanovnika,grad.drzava FROM grad,drzava WHERE grad.id=drzava.glavni_grad AND  drzava.naziv LIKE ?");
+            dajGlavniGrad = conn.prepareStatement("SELECT grad.id,grad.naziv,grad.broj_stanovnika,grad.drzava FROM grad,drzava WHERE grad.drzava=drzava.id AND  drzava.naziv LIKE ?");
         } catch (SQLException e) {
             regenerisiBazu();
             try {
-                dajGlavniGrad = conn.prepareStatement("SELECT grad.id,grad.naziv,grad.broj_stanovnika,grad.drzava FROM grad,drzava WHERE grad.id=drzava.glavni_grad AND  drzava.naziv LIKE ?");
+                dajGlavniGrad = conn.prepareStatement("SELECT grad.id,grad.naziv,grad.broj_stanovnika,grad.drzava FROM grad,drzava WHERE grad.drzava=drzava.id AND  drzava.naziv LIKE ?");
             } catch (SQLException e1) {
 
             }
@@ -156,7 +156,7 @@ public class GeografijaDAO {
 
     public void izmijeniGrad(Grad grad) {
         try {
-            izmijeniGradUpit.setInt(1,grad.getId());
+            izmijeniGradUpit.setString(1,grad.getNaziv());
             izmijeniGradUpit.execute();
         } catch (SQLException e) {
             e.printStackTrace();
