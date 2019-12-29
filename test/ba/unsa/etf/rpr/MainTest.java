@@ -14,4 +14,6 @@ class MainTest {
                 "Graz (Austrija) - 280200\n";
         assertEquals(expected, result);
     }
+
+
 }

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import java.net.URL?>
+<GridPane alignment="center" hgap="10" vgap="10" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ba.unsa.etf.rpr.GlavnaController">
+    <stylesheets>
+        <URL value="@../css/izgled.css" />
+    </stylesheets>
+    <children>
+        <TableView fx:id="tableViewGradovi" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS">
+            <columns>
+                <TableColumn fx:id="colGradId" prefWidth="75.0" text="Id" />
+                <TableColumn fx:id="colGradNaziv" prefWidth="75.0" text="Naziv" />
+                <TableColumn fx:id="colGradStanovnika" prefWidth="75.0" text="Stanovnika" />
+                <TableColumn fx:id="colGradDrzava" prefWidth="75.0" text="Drzava" />
+            </columns>
+        </TableView>
+        <VBox alignment="TOP_CENTER" prefWidth="120.0" spacing="7.0" GridPane.columnIndex="1">
+            <children>
+                <Button fx:id="btnDodajGrad" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#dodajGrad" text="Dodaj grad" />
+                <Button fx:id="btnDodajDrzavu" maxWidth="1.7976931348623157E308" minWidth="90.4" mnemonicParsing="false" onAction="#dodajDrzavu" text="Dodaj državu" />
+                <Button fx:id="btnIzmijeniGrad" maxHeight="1.7976931348623157E308" minWidth="90.4" mnemonicParsing="false" onAction="#izmijeniGrad" text="Izmijeni grad" />
+                <Button fx:id="btnObrisiGrad" maxHeight="1.7976931348623157E308" minWidth="90.4" mnemonicParsing="false" text="Obriši grad" />
+            </children>
+            <GridPane.margin>
+                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+            </GridPane.margin>
+        </VBox>
+    </children>
+    <columnConstraints>
+        <ColumnConstraints />
+        <ColumnConstraints minWidth="10.0" prefWidth="100.0" />
+    </columnConstraints>
+    <rowConstraints>
+        <RowConstraints />
+    </rowConstraints>
+</GridPane>
