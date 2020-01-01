@@ -25,15 +25,16 @@ public class GlavnaController {
     private TableColumn colGradStanovnika;
     @FXML
     private TableColumn colGradDrzava;
-    private GeografijaDAO dao;
-    public ObservableList<Grad> lista = FXCollections.observableArrayList(GeografijaDAO.getInstance().gradovi());
+    private GeografijaDAO dao = GeografijaDAO.getInstance();
 
     public void initialize() {
-//        colGradId.setCellFactory(new PropertyValueFactory<Grad,Integer>("Id"));
-//        colGradNaziv.setCellFactory(new PropertyValueFactory<Grad,String>("Naziv"));
-//        colGradStanovnika.setCellFactory(new PropertyValueFactory<Grad,Integer>("Stanovnika"));
-
-        tableViewGradovi.getItems().setAll(lista);
+        colGradId.setCellValueFactory(new PropertyValueFactory<Grad,Integer>("id"));
+        colGradNaziv.setCellValueFactory(new PropertyValueFactory<Grad,String>("naziv"));
+        colGradStanovnika.setCellValueFactory(new PropertyValueFactory<Grad,Integer>("brojStanovnika"));
+        colGradDrzava.setCellValueFactory(new PropertyValueFactory<Grad,Drzava>("drzava"));
+        tableViewGradovi.setItems(FXCollections.observableArrayList(dao.getInstance().gradovi()));
+        tableViewGradovi.refresh();
+        //dodati listener koji refresha table view
     }
 
     public void dodajDrzavu() throws IOException {
@@ -45,7 +46,10 @@ public class GlavnaController {
     }
 
     public void dodajGrad() throws IOException {
-        Parent root = FXMLLoader.load(getClass().getResource("/fxml/grad.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/grad.fxml"));
+        loader.setController(new GradController(dao.dajDrzave(),null));
+
+        Parent root = loader.load();
         Stage newWindow = new Stage();
         newWindow.setTitle("Gradovi");
         newWindow.setScene(new Scene(root));

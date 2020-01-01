@@ -12,11 +12,11 @@ public class DrzavaController {
 
     public void validiraj() {
         if(!fieldNaziv.getText().equals("")) {
-            fieldNaziv.getStylesheets().removeAll("poljeNijeIspravno");
-            fieldNaziv.getStylesheets().add("poljeIspravno");
+            fieldNaziv.getStyleClass().removeAll("poljeNijeIspravno");
+            fieldNaziv.getStyleClass().add("poljeIspravno");
         } else {
-            fieldNaziv.getStylesheets().removeAll("poljeIspravno");
-            fieldNaziv.getStylesheets().add("poljeNijeIspravno");
+            fieldNaziv.getStyleClass().removeAll("poljeIspravno");
+            fieldNaziv.getStyleClass().add("poljeNijeIspravno");
         }
     }
 

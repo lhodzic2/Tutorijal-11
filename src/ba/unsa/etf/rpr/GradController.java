@@ -1,7 +1,9 @@
 package ba.unsa.etf.rpr;
 
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
@@ -10,25 +12,48 @@ public class GradController {
     private TextField fieldNaziv;
     @FXML
     private TextField fieldBrojStanovnika;
+    @FXML
+    private ChoiceBox choiceDrzava;
+    private ObservableList<Drzava> drzave;
+
+    public GradController(ObservableList<Drzava> drzave, Object o) {
+        this.drzave = drzave;
+    }
+
+    public void initialize() {
+        choiceDrzava.setItems(drzave);
+        fieldNaziv.textProperty().addListener((obs,oldValue,newValue) -> {
+
+        });
+
+        fieldBrojStanovnika.textProperty().addListener((obs,oldValue,newValue) -> {
+
+        });
+
+        choiceDrzava.selectionModelProperty().addListener((obs,oldValue,newValue) -> {
+
+        });
+    }
 
     public void validiraj() {
         if (fieldNaziv.getText().equals("")) {
-            fieldNaziv.getStylesheets().removeAll("poljeIspravno");
-            fieldNaziv.getStylesheets().add("poljeNijeIspravno");
+            fieldNaziv.getStyleClass().removeAll("poljeIspravno");
+            fieldNaziv.getStyleClass().add("poljeNijeIspravno");
         } else {
-            fieldNaziv.getStylesheets().removeAll("poljeNijeIspravno");
-            fieldNaziv.getStylesheets().add("poljeIspravno");
+            fieldNaziv.getStyleClass().removeAll("poljeNijeIspravno");
+            fieldNaziv.getStyleClass().add("poljeIspravno");
         }
         try {
             if (Integer.parseInt(fieldBrojStanovnika.getText()) < 0) {
-                fieldBrojStanovnika.getStylesheets().removeAll("poljeIspravno");
-                fieldBrojStanovnika.getStylesheets().add("poljeNijeIspravno");
+                fieldBrojStanovnika.getStyleClass().removeAll("poljeIspravno");
+                fieldBrojStanovnika.getStyleClass().add("poljeNijeIspravno");
             } else {
-                fieldBrojStanovnika.getStylesheets().removeAll("poljeNijeIspravno");
-                fieldBrojStanovnika.getStylesheets().add("poljeIspravno");
+                fieldBrojStanovnika.getStyleClass().removeAll("poljeNijeIspravno");
+                fieldBrojStanovnika.getStyleClass().add("poljeIspravno");
             }
         } catch (NumberFormatException e) {
-            System.out.println("Nije unesen broj");
+            fieldBrojStanovnika.getStyleClass().removeAll("poljeIspravno");
+            fieldBrojStanovnika.getStyleClass().add("poljeNijeIspravno");
         }
     }
 

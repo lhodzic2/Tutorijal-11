@@ -1,5 +1,9 @@
 package ba.unsa.etf.rpr;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.fxml.FXML;
+
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.sql.*;
@@ -9,8 +13,10 @@ import java.util.Scanner;
 public class GeografijaDAO {
     private static GeografijaDAO instance = null;
     private Connection conn;
-    private PreparedStatement dajGradoveUpit, dajGlavniGrad,obrisiGradoveZaDrzavu,obrisiDrzavuUpit,dajIdDrzave,dodajGrad,dodajDrzavu,izmijeniGradUpit, dajDrzavuIdUpit,dajDrzavuNazivUpit;
+    private PreparedStatement dajGradoveUpit, dajGlavniGrad,obrisiGradoveZaDrzavu,obrisiDrzavuUpit,dajIdDrzave,dodajGrad,dodajDrzavu,izmijeniGradUpit, dajDrzavuIdUpit,dajDrzaveUpit;
+    private ObservableList<Drzava> drzave = FXCollections.observableArrayList();
 
+//dodati observable liste i napuniti ih podacima u kostruktoru
     private GeografijaDAO() {
         try {
             conn = DriverManager.getConnection("jdbc:sqlite:baza.db");
@@ -36,9 +42,21 @@ public class GeografijaDAO {
             dodajGrad = conn.prepareStatement("INSERT INTO grad VALUES (?,?,?,?)");
             dodajDrzavu = conn.prepareStatement("INSERT INTO drzava VALUES (?,?,?)");
             izmijeniGradUpit = conn.prepareStatement("UPDATE grad SET naziv=?");
+            dajDrzaveUpit = conn.prepareStatement("SELECT * FROM drzava");
         } catch (SQLException e) {
-
         }
+    }
+
+    public ObservableList<Drzava> dajDrzave() {
+        try {
+            ResultSet rs = dajDrzaveUpit.executeQuery();
+            while(rs.next()) {
+                drzave.add(new Drzava(rs.getInt("id"),rs.getString("naziv"),glavniGrad(rs.getString("naziv"))));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return drzave;
     }
 
     private void regenerisiBazu()  {
