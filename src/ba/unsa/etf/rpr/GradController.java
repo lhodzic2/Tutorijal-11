@@ -62,4 +62,8 @@ public class GradController {
         Stage window = (Stage) n.getScene().getWindow();
         window.close();
     }
+
+    public Grad getGrad() {
+        return new Grad(0,fieldNaziv.getText(),Integer.parseInt(fieldBrojStanovnika.getText()), (Drzava) choiceDrzava.getSelectionModel().getSelectedItem());
+    }
 }

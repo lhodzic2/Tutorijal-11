@@ -13,7 +13,7 @@ import java.util.Scanner;
 public class GeografijaDAO {
     private static GeografijaDAO instance = null;
     private Connection conn;
-    private PreparedStatement dajGradoveUpit, dajGlavniGrad,obrisiGradoveZaDrzavu,obrisiDrzavuUpit,dajIdDrzave,dodajGrad,dodajDrzavu,izmijeniGradUpit, dajDrzavuIdUpit,dajDrzaveUpit;
+    private PreparedStatement dajGradoveUpit, dajGlavniGrad,obrisiGradoveZaDrzavu,obrisiDrzavuUpit,dajIdDrzave,dodajGrad,dodajDrzavu,izmijeniGradUpit, dajDrzavuIdUpit,dajDrzaveUpit,dajIdGrada;
     private ObservableList<Drzava> drzave = FXCollections.observableArrayList();
 
 //dodati observable liste i napuniti ih podacima u kostruktoru
@@ -43,8 +43,24 @@ public class GeografijaDAO {
             dodajDrzavu = conn.prepareStatement("INSERT INTO drzava VALUES (?,?,?)");
             izmijeniGradUpit = conn.prepareStatement("UPDATE grad SET naziv=?");
             dajDrzaveUpit = conn.prepareStatement("SELECT * FROM drzava");
+            dajIdGrada = conn.prepareStatement("SELECT max(id) FROM grad");
         } catch (SQLException e) {
         }
+    }
+
+    public int dajIdGrada() {
+        ResultSet rs = null;
+        try {
+            rs = dajIdGrada.executeQuery();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        try {
+            return rs.getInt(1) + 1;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
     }
 
     public ObservableList<Drzava> dajDrzave() {

@@ -1,6 +1,7 @@
 package ba.unsa.etf.rpr;
 
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -35,6 +36,11 @@ public class GlavnaController {
         tableViewGradovi.setItems(FXCollections.observableArrayList(dao.getInstance().gradovi()));
         tableViewGradovi.refresh();
         //dodati listener koji refresha table view
+        tableViewGradovi.getItems().addListener((ListChangeListener<Grad>) l -> {
+            tableViewGradovi.getItems().clear();
+            tableViewGradovi.setItems(FXCollections.observableArrayList(dao.getInstance().gradovi()));
+            tableViewGradovi.refresh();
+        });
     }
 
     public void dodajDrzavu() throws IOException {
@@ -47,12 +53,21 @@ public class GlavnaController {
 
     public void dodajGrad() throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/grad.fxml"));
-        loader.setController(new GradController(dao.dajDrzave(),null));
+        GradController controller = new GradController(dao.dajDrzave(),null);
+        loader.setController(controller);
 
         Parent root = loader.load();
         Stage newWindow = new Stage();
         newWindow.setTitle("Gradovi");
         newWindow.setScene(new Scene(root));
+        newWindow.setOnHiding(e -> {
+            int id = dao.dajIdGrada();
+            Grad g = controller.getGrad();
+            g.setId(id);
+            dao.dodajGrad(g);
+
+            tableViewGradovi.refresh();
+        });
         newWindow.show();
     }
 
