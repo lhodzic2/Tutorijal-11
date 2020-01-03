@@ -41,12 +41,8 @@ public class GlavnaController {
         colGradDrzava.setCellValueFactory(new PropertyValueFactory<Grad,Drzava>("drzava"));
         tableViewGradovi.setItems(gradovi);
         gradovi.addListener((ListChangeListener<Grad>) l -> {
-//                    gradovi.sorted( (g1,g2) -> {
-//                       if (g1.getBrojStanovnika() > g2.getBrojStanovnika() ) return 1;
-//                       if (g1.getBrojStanovnika() < g2.getBrojStanovnika() ) return -1;
-//                       return 0;
-//                    });
-
+                    gradovi = FXCollections.observableArrayList(dao.gradovi());
+                    tableViewGradovi.setItems(gradovi);
                     tableViewGradovi.refresh();
                 }
             );
