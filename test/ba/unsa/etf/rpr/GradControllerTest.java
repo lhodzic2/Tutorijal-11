@@ -26,24 +26,24 @@ class GradControllerTest {
     GradController ctrl;
 
     @Start
-//    public void start (Stage stage) throws Exception {
-//        // Brisemo bazu za slucaj da su prethodni testovi kreirali/brisali drzave
-//        GeografijaDAO.removeInstance();
-//        File dbfile = new File("baza.db");
-//        dbfile.delete();
-//        GeografijaDAO dao = GeografijaDAO.getInstance();
-//
-//        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/grad.fxml"));
-//        ctrl = new GradController(null, dao.drzave());
-//        loader.setController(ctrl);
-//        Parent root = loader.load();
-//        stage.setTitle("Grad");
-//        stage.setScene(new Scene(root, USE_COMPUTED_SIZE, USE_COMPUTED_SIZE));
-//        stage.setResizable(false);
-//        stage.show();
-//        stage.toFront();
-//        theStage = stage;
-//    }
+    public void start (Stage stage) throws Exception {
+        // Brisemo bazu za slucaj da su prethodni testovi kreirali/brisali drzave
+        GeografijaDAO.removeInstance();
+        File dbfile = new File("baza.db");
+        dbfile.delete();
+        GeografijaDAO dao = GeografijaDAO.getInstance();
+
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/grad.fxml"));
+        ctrl = new GradController(null, dao.drzave());
+        loader.setController(ctrl);
+        Parent root = loader.load();
+        stage.setTitle("Grad");
+        stage.setScene(new Scene(root, USE_COMPUTED_SIZE, USE_COMPUTED_SIZE));
+        stage.setResizable(false);
+        stage.show();
+        stage.toFront();
+        theStage = stage;
+    }
 
     @Test
     public void testValidacijaGrada(FxRobot robot) {

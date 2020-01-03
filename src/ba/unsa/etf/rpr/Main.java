@@ -9,14 +9,20 @@ import javafx.stage.Stage;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import static javafx.scene.layout.Region.USE_COMPUTED_SIZE;
+
 
 public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception{
-        Parent root = FXMLLoader.load(getClass().getResource("/fxml/glavna.fxml"));
-        primaryStage.setTitle("Gradovi svijeta");
-        primaryStage.setScene(new Scene(root));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/glavna.fxml"));
+        GlavnaController ctrl = new GlavnaController();
+        loader.setController(ctrl);
+        Parent root = loader.load();
+        primaryStage.setTitle("Grad");
+        primaryStage.setScene(new Scene(root, USE_COMPUTED_SIZE, USE_COMPUTED_SIZE));
+        primaryStage.setResizable(false);
         primaryStage.show();
     }
 

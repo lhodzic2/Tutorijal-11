@@ -18,7 +18,7 @@ public class GradController {
     private ObservableList<Drzava> drzave;
     private Grad grad;
 
-    public GradController(ObservableList<Drzava> drzave, Grad grad) {
+    public GradController(Grad grad, ObservableList<Drzava> drzave) {
         this.drzave = drzave;
         this.grad = grad;
     }
@@ -45,6 +45,7 @@ public class GradController {
             if (Integer.parseInt(fieldBrojStanovnika.getText()) < 0) {
                 fieldBrojStanovnika.getStyleClass().removeAll("poljeIspravno");
                 fieldBrojStanovnika.getStyleClass().add("poljeNijeIspravno");
+                return;
             } else {
                 fieldBrojStanovnika.getStyleClass().removeAll("poljeNijeIspravno");
                 fieldBrojStanovnika.getStyleClass().add("poljeIspravno");
@@ -52,8 +53,9 @@ public class GradController {
         } catch (NumberFormatException e) {
             fieldBrojStanovnika.getStyleClass().removeAll("poljeIspravno");
             fieldBrojStanovnika.getStyleClass().add("poljeNijeIspravno");
+            return;
         }
-        if (fieldBrojStanovnika.getStyleClass().equals("poljeNijeIspravno") || fieldNaziv.getStyleClass().equals("poljeNijeIspravno") || choiceDrzava.getSelectionModel().getSelectedItem() == null ) {
+        if (fieldBrojStanovnika.getText().equals("") || fieldNaziv.getText().equals("")  ) {
             return;
         }
         Node n = (Node) actionEvent.getSource();

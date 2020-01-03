@@ -7,6 +7,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Scanner;
 
 public class GeografijaDAO {
@@ -53,15 +54,12 @@ public class GeografijaDAO {
         drzave = FXCollections.observableArrayList();
     }
 
-    public ObservableList<Grad> getGradovi() {
-        return gradovi;
-    }
-
     public void obrisiGrad(Grad grad) {
         try {
             obrisiGrad.setInt(1,grad.getId());
             obrisiGrad.execute();
-            gradovi.remove(grad);
+            gradovi.clear();
+            gradovi = FXCollections.observableArrayList(gradovi());
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -89,7 +87,7 @@ public class GeografijaDAO {
         return 0;
     }
 
-    public ObservableList<Drzava> dajDrzave() {
+    public ObservableList<Drzava> drzave() {
         try {
             ResultSet rs = dajDrzaveUpit.executeQuery();
             while(rs.next()) {
@@ -199,7 +197,8 @@ public class GeografijaDAO {
             dodajGrad.setInt(3, grad.getBrojStanovnika());
             dodajGrad.setInt(4, grad.getDrzava().getId());
             dodajGrad.execute();
-            gradovi.add(grad);
+            gradovi.clear();
+            gradovi = FXCollections.observableArrayList(gradovi());
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -235,11 +234,20 @@ public class GeografijaDAO {
             dajIdDrzave.setString(1,drzava);
             ResultSet rs = null;
             rs = dajIdDrzave.executeQuery();
-            if (!rs.first()) return null;
+            if (!rs.next()) return null;
             pom = new Drzava(rs.getInt(1),drzava,null);
             } catch (SQLException e) {
                 e.printStackTrace();
             }
         return pom;
+    }
+
+    public Grad nadjiGrad(String graz) {
+        return null;
+    }
+
+
+    public ObservableList<Grad> getGradovi() {
+        return gradovi;
     }
 }

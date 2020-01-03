@@ -1,5 +1,6 @@
 package ba.unsa.etf.rpr;
 
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -8,14 +9,16 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
+import java.util.ArrayList;
+
 public class DrzavaController {
     @FXML
     private TextField fieldNaziv;
     @FXML
     private ChoiceBox<Grad> choiceGrad;
     ObservableList<Grad> gradovi;
-    public DrzavaController(ObservableList<Grad> gradovi) {
-        this.gradovi = gradovi;
+    public DrzavaController(Object o, ArrayList<Grad> gradovi) {
+        this.gradovi = FXCollections.observableArrayList(gradovi);
     }
 
     public void initialize() {
@@ -30,9 +33,10 @@ public class DrzavaController {
             fieldNaziv.getStyleClass().removeAll("poljeIspravno");
             fieldNaziv.getStyleClass().add("poljeNijeIspravno");
         }
-        if (fieldNaziv.getStyleClass().equals("poljeNijeIspravno") || choiceGrad.getSelectionModel().getSelectedItem() == null ) {
+        if (fieldNaziv.getText().equals("")) {
             return;
         }
+        if (choiceGrad.getSelectionModel().getSelectedItem() == null) choiceGrad.getSelectionModel().selectFirst();
         Node n = (Node) actionEvent.getSource();
         Stage window = (Stage) n.getScene().getWindow();
         window.close();

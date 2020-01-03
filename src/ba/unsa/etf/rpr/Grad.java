@@ -17,6 +17,9 @@ public class Grad {
     }
 
     public Grad() {
+        id = new SimpleIntegerProperty();
+        naziv = new SimpleStringProperty();
+        brojStanovnika = new SimpleIntegerProperty();
     }
 
     public int getId() {

@@ -15,6 +15,8 @@ public class Drzava {
     }
 
     public Drzava() {
+        id = new SimpleIntegerProperty();
+        naziv = new SimpleStringProperty();
     }
 
     public int getId() {

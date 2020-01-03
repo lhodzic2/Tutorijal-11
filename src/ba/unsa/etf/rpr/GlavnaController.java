@@ -32,7 +32,7 @@ public class GlavnaController {
     private TableColumn colGradDrzava;
     private GeografijaDAO dao = GeografijaDAO.getInstance();
     private ObservableList<Grad> gradovi = dao.getGradovi();
-    private ObservableList<Drzava> drzave = dao.dajDrzave();
+    private ObservableList<Drzava> drzave = dao.drzave();
 
     public void initialize() {
         colGradId.setCellValueFactory(new PropertyValueFactory<Grad,Integer>("id"));
@@ -50,7 +50,7 @@ public class GlavnaController {
 
     public void dodajDrzavu() throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/drzava.fxml"));
-        DrzavaController controller = new DrzavaController(gradovi);
+        DrzavaController controller = new DrzavaController(null,dao.gradovi());
         loader.setController(controller);
 
         Parent root = loader.load();
@@ -68,7 +68,7 @@ public class GlavnaController {
 
     public void dodajGrad() throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/grad.fxml"));
-        GradController controller = new GradController(drzave,null);
+        GradController controller = new GradController(null,drzave);
         loader.setController(controller);
 
         Parent root = loader.load();
@@ -94,7 +94,7 @@ public class GlavnaController {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/grad.fxml"));
         Grad izabraniGrad = tableViewGradovi.getSelectionModel().getSelectedItem();
         if (izabraniGrad == null) return;
-        GradController controller = new GradController(drzave,izabraniGrad);
+        GradController controller = new GradController(izabraniGrad,drzave);
         loader.setController(controller);
         Parent root = loader.load();
         Stage newWindow = new Stage();
