@@ -18,6 +18,7 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws Exception{
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/glavna.fxml"));
         GlavnaController ctrl = new GlavnaController();
+
         loader.setController(ctrl);
         Parent root = loader.load();
         primaryStage.setTitle("Grad");

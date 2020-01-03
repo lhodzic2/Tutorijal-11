@@ -108,9 +108,10 @@ public class GlavnaController {
             } catch (NumberFormatException i) {
                 return;
             }
+            g.setId(izabraniGrad.getId());
             dao.izmijeniGrad(g);
-            gradovi.remove(tableViewGradovi.getSelectionModel().getSelectedItem());
-            gradovi.add(g);
+//            gradovi.remove(tableViewGradovi.getSelectionModel().getSelectedItem());
+//            gradovi.add(g);
             tableViewGradovi.getSelectionModel().select(g);
             tableViewGradovi.refresh();
         });

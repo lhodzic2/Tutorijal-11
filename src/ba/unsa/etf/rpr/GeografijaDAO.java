@@ -13,7 +13,7 @@ import java.util.Scanner;
 public class GeografijaDAO {
     private static GeografijaDAO instance = null;
     private Connection conn;
-    private PreparedStatement dajGradoveUpit, dajGlavniGrad,obrisiGradoveZaDrzavu,obrisiDrzavuUpit,dajIdDrzave,dodajGrad,dodajDrzavu,izmijeniGradUpit, dajDrzavuPoIdUpit,dajDrzaveUpit,dajIdGrada,generisiIdDrzave,obrisiGrad;
+    private PreparedStatement dajGradoveUpit, dajGlavniGrad,obrisiGradoveZaDrzavu,obrisiDrzavuUpit,dajIdDrzave,dodajGrad,dodajDrzavu,izmijeniGradUpit, dajDrzavuPoIdUpit,dajDrzaveUpit,dajIdGrada,generisiIdDrzave,obrisiGrad,nadjiGrad;
     private ObservableList<Drzava> drzave;
     private ObservableList<Grad> gradovi;
 
@@ -48,6 +48,7 @@ public class GeografijaDAO {
             dajIdGrada = conn.prepareStatement("SELECT max(id) FROM grad");
             generisiIdDrzave = conn.prepareStatement("SELECT max(id) FROM drzava");
             obrisiGrad = conn.prepareStatement("DELETE FROM grad WHERE id=?");
+            nadjiGrad = conn.prepareStatement("SELECT * FROM grad WHERE naziv LIKE ?");
         } catch (SQLException e) {
         }
         gradovi = FXCollections.observableArrayList(gradovi());
@@ -179,6 +180,7 @@ public class GeografijaDAO {
         try {
             dajIdDrzave.setString(1,drzava);
             ResultSet rs = dajIdDrzave.executeQuery();
+            if (!rs.next()) return;
             int id = rs.getInt("id");
             obrisiGradoveZaDrzavu.setInt(1,id);
             obrisiGradoveZaDrzavu.execute();
@@ -223,6 +225,8 @@ public class GeografijaDAO {
             izmijeniGradUpit.setInt(3,grad.getDrzava().getId());
             izmijeniGradUpit.setInt(4,grad.getId());
             izmijeniGradUpit.execute();
+            gradovi.clear();
+            gradovi = FXCollections.observableArrayList(gradovi());
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -242,8 +246,24 @@ public class GeografijaDAO {
         return pom;
     }
 
-    public Grad nadjiGrad(String graz) {
-        return null;
+    public Grad nadjiGrad(String grad) {
+        try {
+            nadjiGrad.setString(1,grad);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        ResultSet rs;
+        Grad g = null;
+        try {
+            rs = nadjiGrad.executeQuery();
+            while(rs.next()) {
+                Drzava d = dajDrzavu(rs.getInt(4),g);
+                g = new Grad(rs.getInt(1),rs.getString(2),rs.getInt(3),d);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return g;
     }
 
 
