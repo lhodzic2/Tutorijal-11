@@ -89,6 +89,7 @@ public class GeografijaDAO {
     }
 
     public ObservableList<Drzava> drzave() {
+        if (drzave.size() != 0) drzave.clear();
         try {
             ResultSet rs = dajDrzaveUpit.executeQuery();
             while(rs.next()) {
@@ -212,7 +213,8 @@ public class GeografijaDAO {
             dodajDrzavu.setString(2,drzava.getNaziv());
             dodajDrzavu.setInt(3,drzava.getGlavniGrad().getId());
             dodajDrzavu.execute();
-            drzave.add(drzava);
+            drzave.clear();
+            drzave = drzave();
         } catch (SQLException e) {
             e.printStackTrace();
         }

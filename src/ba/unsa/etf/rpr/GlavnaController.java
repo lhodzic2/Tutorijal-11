@@ -63,6 +63,7 @@ public class GlavnaController {
             if (d.getNaziv().equals("") || d.getGlavniGrad() == null) return;
             d.setId(dao.generisiIdDrzave());
             dao.dodajDrzavu(d);
+            tableViewGradovi.refresh();
         });
     }
 
