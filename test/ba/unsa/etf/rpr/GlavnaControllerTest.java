@@ -63,11 +63,6 @@ class GlavnaControllerTest {
 
         // Da li sada ima 4 grada u tableview?
         TableView tableViewGradovi = robot.lookup("#tableViewGradovi").queryAs(TableView.class);
-
-
-
-
-
         assertEquals(4, tableViewGradovi.getItems().size());
 
         // Da li je Manchester obrisan iz baze?
