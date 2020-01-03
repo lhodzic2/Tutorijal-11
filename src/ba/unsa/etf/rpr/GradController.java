@@ -58,6 +58,7 @@ public class GradController {
         if (fieldBrojStanovnika.getText().equals("") || fieldNaziv.getText().equals("")  ) {
             return;
         }
+        if (choiceDrzava.getSelectionModel().getSelectedItem() == null) choiceDrzava.getSelectionModel().selectFirst();
         Node n = (Node) actionEvent.getSource();
         Stage window = (Stage) n.getScene().getWindow();
         window.close();
