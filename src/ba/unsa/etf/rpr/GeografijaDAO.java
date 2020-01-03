@@ -2,7 +2,6 @@ package ba.unsa.etf.rpr;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.fxml.FXML;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -13,7 +12,7 @@ import java.util.Scanner;
 public class GeografijaDAO {
     private static GeografijaDAO instance = null;
     private Connection conn;
-    private PreparedStatement dajGradoveUpit, dajGlavniGrad,obrisiGradoveZaDrzavu,obrisiDrzavuUpit,dajIdDrzave,dodajGrad,dodajDrzavu,izmijeniGradUpit, dajDrzavuIdUpit,dajDrzaveUpit,dajIdGrada;
+    private PreparedStatement dajGradoveUpit, dajGlavniGrad,obrisiGradoveZaDrzavu,obrisiDrzavuUpit,dajIdDrzave,dodajGrad,dodajDrzavu,izmijeniGradUpit, dajDrzavuPoIdUpit,dajDrzaveUpit,dajIdGrada,generisiIdDrzave;
     private ObservableList<Drzava> drzave = FXCollections.observableArrayList();
 
 //dodati observable liste i napuniti ih podacima u kostruktoru
@@ -34,28 +33,36 @@ public class GeografijaDAO {
             }
         }
         try {
-            dajDrzavuIdUpit = conn.prepareStatement("SELECT * FROM drzava WHERE id=?");
+            dajDrzavuPoIdUpit = conn.prepareStatement("SELECT * FROM drzava WHERE id=?");
             dajGradoveUpit = conn.prepareStatement("SELECT * FROM grad ORDER BY broj_stanovnika DESC");
             obrisiGradoveZaDrzavu = conn.prepareStatement("DELETE FROM grad WHERE drzava = ?");
             obrisiDrzavuUpit = conn.prepareStatement("DELETE FROM drzava WHERE id=?");
             dajIdDrzave = conn.prepareStatement("SELECT id FROM drzava WHERE naziv LIKE ?");
             dodajGrad = conn.prepareStatement("INSERT INTO grad VALUES (?,?,?,?)");
             dodajDrzavu = conn.prepareStatement("INSERT INTO drzava VALUES (?,?,?)");
-            izmijeniGradUpit = conn.prepareStatement("UPDATE grad SET naziv=?");
+            izmijeniGradUpit = conn.prepareStatement("UPDATE grad SET naziv=?,broj_stanovnika=?,drzava=? WHERE id=?");
             dajDrzaveUpit = conn.prepareStatement("SELECT * FROM drzava");
             dajIdGrada = conn.prepareStatement("SELECT max(id) FROM grad");
+            generisiIdDrzave = conn.prepareStatement("SELECT max(id) FROM drzava");
         } catch (SQLException e) {
         }
+    }
+
+    public int generisiIdDrzave() {
+        ResultSet rs = null;
+        try {
+            rs = generisiIdDrzave.executeQuery();
+            return rs.getInt(1);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
     }
 
     public int dajIdGrada() {
         ResultSet rs = null;
         try {
             rs = dajIdGrada.executeQuery();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        try {
             return rs.getInt(1) + 1;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -114,8 +121,8 @@ public class GeografijaDAO {
     }
 
     private Drzava dajDrzavu(int id,Grad grad) throws SQLException {
-        dajDrzavuIdUpit.setInt(1,id);
-        ResultSet rs = dajDrzavuIdUpit.executeQuery();
+        dajDrzavuPoIdUpit.setInt(1,id);
+        ResultSet rs = dajDrzavuPoIdUpit.executeQuery();
         if (!rs.next()) return null;
         return new Drzava(id,rs.getString(2),grad);
     }
@@ -191,6 +198,9 @@ public class GeografijaDAO {
     public void izmijeniGrad(Grad grad) {
         try {
             izmijeniGradUpit.setString(1,grad.getNaziv());
+            izmijeniGradUpit.setInt(2,grad.getBrojStanovnika());
+            izmijeniGradUpit.setInt(3,grad.getDrzava().getId());
+            izmijeniGradUpit.setInt(4,grad.getId());
             izmijeniGradUpit.execute();
         } catch (SQLException e) {
             e.printStackTrace();

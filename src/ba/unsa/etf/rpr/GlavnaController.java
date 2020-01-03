@@ -27,26 +27,35 @@ public class GlavnaController {
     @FXML
     private TableColumn colGradDrzava;
     private GeografijaDAO dao = GeografijaDAO.getInstance();
+    ObservableList<Grad> gradovi = FXCollections.observableArrayList(dao.gradovi());
 
     public void initialize() {
         colGradId.setCellValueFactory(new PropertyValueFactory<Grad,Integer>("id"));
         colGradNaziv.setCellValueFactory(new PropertyValueFactory<Grad,String>("naziv"));
         colGradStanovnika.setCellValueFactory(new PropertyValueFactory<Grad,Integer>("brojStanovnika"));
         colGradDrzava.setCellValueFactory(new PropertyValueFactory<Grad,Drzava>("drzava"));
-        tableViewGradovi.setItems(FXCollections.observableArrayList(dao.getInstance().gradovi()));
+        tableViewGradovi.setItems(gradovi);
         tableViewGradovi.refresh();
-        //dodati listener koji refresha table view
-        tableViewGradovi.getItems().addListener((ListChangeListener<Grad>) l -> {
-            tableViewGradovi.getItems().clear();
-            tableViewGradovi.setItems(FXCollections.observableArrayList(dao.getInstance().gradovi()));
-            tableViewGradovi.refresh();
-        });
+
+        gradovi.addListener((ListChangeListener<Grad>) l -> {
+                    gradovi.sorted( (g1,g2) -> {
+                       if (g1.getBrojStanovnika() > g2.getBrojStanovnika() ) return 1;
+                       if (g1.getBrojStanovnika() < g2.getBrojStanovnika() ) return -1;
+                       return 0;
+                    });
+                    tableViewGradovi.refresh();
+                }
+            );
     }
 
     public void dodajDrzavu() throws IOException {
-        Parent root = FXMLLoader.load(getClass().getResource("/fxml/drzava.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/drzava.fxml"));
+        DrzavaController controller = new DrzavaController(FXCollections.observableArrayList(dao.gradovi()));
+        loader.setController(controller);
+
+        Parent root = loader.load();
         Stage newWindow = new Stage();
-        newWindow.setTitle("Države");
+        newWindow.setTitle("Gradovi");
         newWindow.setScene(new Scene(root));
         newWindow.show();
     }
@@ -60,23 +69,45 @@ public class GlavnaController {
         Stage newWindow = new Stage();
         newWindow.setTitle("Gradovi");
         newWindow.setScene(new Scene(root));
+        newWindow.show();
         newWindow.setOnHiding(e -> {
             int id = dao.dajIdGrada();
-            Grad g = controller.getGrad();
+            Grad g;
+            try {
+                g = controller.getGrad();
+            } catch (NumberFormatException i) {
+                return;
+            }
+            if (g.getNaziv() == null) return;
             g.setId(id);
             dao.dodajGrad(g);
-
-            tableViewGradovi.refresh();
+            gradovi.add(g);
         });
-        newWindow.show();
     }
 
     public void izmijeniGrad() throws IOException {
-        Parent root = FXMLLoader.load(getClass().getResource("/fxml/grad.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/grad.fxml"));
+        Grad izabraniGrad = tableViewGradovi.getSelectionModel().getSelectedItem();
+        if (izabraniGrad == null) return;
+        GradController controller = new GradController(dao.dajDrzave(),izabraniGrad);
+        loader.setController(controller);
+        Parent root = loader.load();
         Stage newWindow = new Stage();
         newWindow.setTitle("Gradovi");
         newWindow.setScene(new Scene(root));
         newWindow.show();
+        newWindow.setOnHiding(e -> {
+            Grad g;
+            try {
+                g = controller.getGrad();
+            } catch (NumberFormatException i) {
+                return;
+            }
+            dao.izmijeniGrad(g);
+            gradovi.remove(tableViewGradovi.getSelectionModel().getSelectedItem());
+            gradovi.add(g);
+            tableViewGradovi.getSelectionModel().select(g);
+        });
     }
 
     public void resetujBazu() {

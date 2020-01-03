@@ -1,6 +1,7 @@
 package ba.unsa.etf.rpr;
 
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.ChoiceBox;
@@ -15,27 +16,24 @@ public class GradController {
     @FXML
     private ChoiceBox choiceDrzava;
     private ObservableList<Drzava> drzave;
+    private Grad grad;
 
-    public GradController(ObservableList<Drzava> drzave, Object o) {
+    public GradController(ObservableList<Drzava> drzave, Grad grad) {
         this.drzave = drzave;
+        this.grad = grad;
     }
 
     public void initialize() {
         choiceDrzava.setItems(drzave);
-        fieldNaziv.textProperty().addListener((obs,oldValue,newValue) -> {
+        if (grad != null) {
+            fieldNaziv.setText(grad.getNaziv());
+            fieldBrojStanovnika.setText(Integer.toString(grad.getBrojStanovnika()));
+            choiceDrzava.getSelectionModel().select(grad.getDrzava());
+        }
 
-        });
-
-        fieldBrojStanovnika.textProperty().addListener((obs,oldValue,newValue) -> {
-
-        });
-
-        choiceDrzava.selectionModelProperty().addListener((obs,oldValue,newValue) -> {
-
-        });
     }
 
-    public void validiraj() {
+    public void validiraj(ActionEvent actionEvent) {
         if (fieldNaziv.getText().equals("")) {
             fieldNaziv.getStyleClass().removeAll("poljeIspravno");
             fieldNaziv.getStyleClass().add("poljeNijeIspravno");
@@ -55,9 +53,17 @@ public class GradController {
             fieldBrojStanovnika.getStyleClass().removeAll("poljeIspravno");
             fieldBrojStanovnika.getStyleClass().add("poljeNijeIspravno");
         }
+        if (fieldBrojStanovnika.getStyleClass().equals("poljeNijeIspravno") || fieldNaziv.getStyleClass().equals("poljeNijeIspravno") || choiceDrzava.getSelectionModel().getSelectedItem() == null ) {
+            return;
+        }
+        Node n = (Node) actionEvent.getSource();
+        Stage window = (Stage) n.getScene().getWindow();
+        window.close();
     }
 
-    public void zatvori(javafx.event.ActionEvent actionEvent) {
+    public void zatvori(ActionEvent actionEvent) {
+        fieldNaziv.clear();
+        fieldBrojStanovnika.clear();
         Node n = (Node) actionEvent.getSource();
         Stage window = (Stage) n.getScene().getWindow();
         window.close();
