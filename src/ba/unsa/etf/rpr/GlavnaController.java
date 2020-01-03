@@ -3,10 +3,13 @@ package ba.unsa.etf.rpr;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -14,6 +17,7 @@ import javafx.stage.Stage;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Optional;
 
 public class GlavnaController {
     @FXML
@@ -27,7 +31,8 @@ public class GlavnaController {
     @FXML
     private TableColumn colGradDrzava;
     private GeografijaDAO dao = GeografijaDAO.getInstance();
-    ObservableList<Grad> gradovi = FXCollections.observableArrayList(dao.gradovi());
+    private ObservableList<Grad> gradovi = dao.getGradovi();
+    private ObservableList<Drzava> drzave = dao.dajDrzave();
 
     public void initialize() {
         colGradId.setCellValueFactory(new PropertyValueFactory<Grad,Integer>("id"));
@@ -35,14 +40,13 @@ public class GlavnaController {
         colGradStanovnika.setCellValueFactory(new PropertyValueFactory<Grad,Integer>("brojStanovnika"));
         colGradDrzava.setCellValueFactory(new PropertyValueFactory<Grad,Drzava>("drzava"));
         tableViewGradovi.setItems(gradovi);
-        tableViewGradovi.refresh();
-
         gradovi.addListener((ListChangeListener<Grad>) l -> {
-                    gradovi.sorted( (g1,g2) -> {
-                       if (g1.getBrojStanovnika() > g2.getBrojStanovnika() ) return 1;
-                       if (g1.getBrojStanovnika() < g2.getBrojStanovnika() ) return -1;
-                       return 0;
-                    });
+//                    gradovi.sorted( (g1,g2) -> {
+//                       if (g1.getBrojStanovnika() > g2.getBrojStanovnika() ) return 1;
+//                       if (g1.getBrojStanovnika() < g2.getBrojStanovnika() ) return -1;
+//                       return 0;
+//                    });
+
                     tableViewGradovi.refresh();
                 }
             );
@@ -50,19 +54,25 @@ public class GlavnaController {
 
     public void dodajDrzavu() throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/drzava.fxml"));
-        DrzavaController controller = new DrzavaController(FXCollections.observableArrayList(dao.gradovi()));
+        DrzavaController controller = new DrzavaController(gradovi);
         loader.setController(controller);
 
         Parent root = loader.load();
         Stage newWindow = new Stage();
-        newWindow.setTitle("Gradovi");
+        newWindow.setTitle("Drzave");
         newWindow.setScene(new Scene(root));
         newWindow.show();
+        newWindow.setOnHiding(e -> {
+            Drzava d = controller.getDrzava();
+            if (d.getNaziv().equals("") || d.getGlavniGrad() == null) return;
+            d.setId(dao.generisiIdDrzave());
+            dao.dodajDrzavu(d);
+        });
     }
 
     public void dodajGrad() throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/grad.fxml"));
-        GradController controller = new GradController(dao.dajDrzave(),null);
+        GradController controller = new GradController(drzave,null);
         loader.setController(controller);
 
         Parent root = loader.load();
@@ -81,7 +91,6 @@ public class GlavnaController {
             if (g.getNaziv() == null) return;
             g.setId(id);
             dao.dodajGrad(g);
-            gradovi.add(g);
         });
     }
 
@@ -89,7 +98,7 @@ public class GlavnaController {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/grad.fxml"));
         Grad izabraniGrad = tableViewGradovi.getSelectionModel().getSelectedItem();
         if (izabraniGrad == null) return;
-        GradController controller = new GradController(dao.dajDrzave(),izabraniGrad);
+        GradController controller = new GradController(drzave,izabraniGrad);
         loader.setController(controller);
         Parent root = loader.load();
         Stage newWindow = new Stage();
@@ -107,6 +116,7 @@ public class GlavnaController {
             gradovi.remove(tableViewGradovi.getSelectionModel().getSelectedItem());
             gradovi.add(g);
             tableViewGradovi.getSelectionModel().select(g);
+            tableViewGradovi.refresh();
         });
     }
 
@@ -117,4 +127,12 @@ public class GlavnaController {
         dao = GeografijaDAO.getInstance();
     }
 
+    public void obrisiGrad(ActionEvent actionEvent) {
+        if (tableViewGradovi.getSelectionModel().getSelectedItem() == null) return;
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.get() == ButtonType.CANCEL) return;
+        dao.obrisiGrad(tableViewGradovi.getSelectionModel().getSelectedItem());
+        tableViewGradovi.refresh();
+    }
 }

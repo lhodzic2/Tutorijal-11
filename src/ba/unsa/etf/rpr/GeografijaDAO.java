@@ -12,10 +12,12 @@ import java.util.Scanner;
 public class GeografijaDAO {
     private static GeografijaDAO instance = null;
     private Connection conn;
-    private PreparedStatement dajGradoveUpit, dajGlavniGrad,obrisiGradoveZaDrzavu,obrisiDrzavuUpit,dajIdDrzave,dodajGrad,dodajDrzavu,izmijeniGradUpit, dajDrzavuPoIdUpit,dajDrzaveUpit,dajIdGrada,generisiIdDrzave;
-    private ObservableList<Drzava> drzave = FXCollections.observableArrayList();
+    private PreparedStatement dajGradoveUpit, dajGlavniGrad,obrisiGradoveZaDrzavu,obrisiDrzavuUpit,dajIdDrzave,dodajGrad,dodajDrzavu,izmijeniGradUpit, dajDrzavuPoIdUpit,dajDrzaveUpit,dajIdGrada,generisiIdDrzave,obrisiGrad;
+    private ObservableList<Drzava> drzave;
+    private ObservableList<Grad> gradovi;
 
-//dodati observable liste i napuniti ih podacima u kostruktoru
+
+
     private GeografijaDAO() {
         try {
             conn = DriverManager.getConnection("jdbc:sqlite:baza.db");
@@ -44,7 +46,24 @@ public class GeografijaDAO {
             dajDrzaveUpit = conn.prepareStatement("SELECT * FROM drzava");
             dajIdGrada = conn.prepareStatement("SELECT max(id) FROM grad");
             generisiIdDrzave = conn.prepareStatement("SELECT max(id) FROM drzava");
+            obrisiGrad = conn.prepareStatement("DELETE FROM grad WHERE id=?");
         } catch (SQLException e) {
+        }
+        gradovi = FXCollections.observableArrayList(gradovi());
+        drzave = FXCollections.observableArrayList();
+    }
+
+    public ObservableList<Grad> getGradovi() {
+        return gradovi;
+    }
+
+    public void obrisiGrad(Grad grad) {
+        try {
+            obrisiGrad.setInt(1,grad.getId());
+            obrisiGrad.execute();
+            gradovi.remove(grad);
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 
@@ -52,7 +71,7 @@ public class GeografijaDAO {
         ResultSet rs = null;
         try {
             rs = generisiIdDrzave.executeQuery();
-            return rs.getInt(1);
+            return rs.getInt(1) + 1;
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -167,6 +186,7 @@ public class GeografijaDAO {
             obrisiGradoveZaDrzavu.execute();
             obrisiDrzavuUpit.setInt(1,id);
             obrisiDrzavuUpit.execute();
+            drzave.remove(nadjiDrzavu(drzava));
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -179,6 +199,7 @@ public class GeografijaDAO {
             dodajGrad.setInt(3, grad.getBrojStanovnika());
             dodajGrad.setInt(4, grad.getDrzava().getId());
             dodajGrad.execute();
+            gradovi.add(grad);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -190,6 +211,7 @@ public class GeografijaDAO {
             dodajDrzavu.setString(2,drzava.getNaziv());
             dodajDrzavu.setInt(3,drzava.getGlavniGrad().getId());
             dodajDrzavu.execute();
+            drzave.add(drzava);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -208,29 +230,16 @@ public class GeografijaDAO {
     }
 
     public Drzava nadjiDrzavu(String drzava) {
-        try {
-            dajIdDrzave.setString(1,drzava);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        ResultSet rs = null;
-        try {
-            rs = dajIdDrzave.executeQuery();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        try {
-            if (!rs.first()) return null;
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
         Drzava pom = null;
         try {
+            dajIdDrzave.setString(1,drzava);
+            ResultSet rs = null;
+            rs = dajIdDrzave.executeQuery();
+            if (!rs.first()) return null;
             pom = new Drzava(rs.getInt(1),drzava,null);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         return pom;
     }
 }

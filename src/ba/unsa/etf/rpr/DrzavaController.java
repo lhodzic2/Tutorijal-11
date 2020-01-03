@@ -22,7 +22,7 @@ public class DrzavaController {
         choiceGrad.setItems(gradovi);
     }
 
-    public void validiraj() {
+    public void validiraj(ActionEvent actionEvent) {
         if(!fieldNaziv.getText().equals("")) {
             fieldNaziv.getStyleClass().removeAll("poljeNijeIspravno");
             fieldNaziv.getStyleClass().add("poljeIspravno");
@@ -33,9 +33,17 @@ public class DrzavaController {
         if (fieldNaziv.getStyleClass().equals("poljeNijeIspravno") || choiceGrad.getSelectionModel().getSelectedItem() == null ) {
             return;
         }
+        Node n = (Node) actionEvent.getSource();
+        Stage window = (Stage) n.getScene().getWindow();
+        window.close();
+    }
+
+    public Drzava getDrzava() {
+        return new Drzava(0,fieldNaziv.getText(),choiceGrad.getSelectionModel().getSelectedItem());
     }
 
     public void zatvori(ActionEvent actionEvent) {
+        fieldNaziv.clear();
         Node n = (Node) actionEvent.getSource();
         Stage window = (Stage) n.getScene().getWindow();
         window.close();

@@ -23,7 +23,7 @@
                 <Button fx:id="btnDodajGrad" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#dodajGrad" text="Dodaj grad" />
                 <Button fx:id="btnDodajDrzavu" maxWidth="1.7976931348623157E308" minWidth="90.4" mnemonicParsing="false" onAction="#dodajDrzavu" text="Dodaj državu" />
                 <Button fx:id="btnIzmijeniGrad" maxHeight="1.7976931348623157E308" minWidth="90.4" mnemonicParsing="false" onAction="#izmijeniGrad" text="Izmijeni grad" />
-                <Button fx:id="btnObrisiGrad" maxHeight="1.7976931348623157E308" minWidth="90.4" mnemonicParsing="false" text="Obriši grad" />
+                <Button fx:id="btnObrisiGrad" maxHeight="1.7976931348623157E308" minWidth="90.4" mnemonicParsing="false" onAction="#obrisiGrad" text="Obriši grad" />
             </children>
             <GridPane.margin>
                 <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
