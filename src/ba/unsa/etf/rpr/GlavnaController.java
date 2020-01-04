@@ -128,9 +128,12 @@ public class GlavnaController {
     public void obrisiGrad(ActionEvent actionEvent) {
         if (tableViewGradovi.getSelectionModel().getSelectedItem() == null) return;
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setHeaderText("Da li ste sigurni da zelite obrisati " + tableViewGradovi.getSelectionModel().getSelectedItem().getNaziv() + "?");
         Optional<ButtonType> result = alert.showAndWait();
         if (result.get() == ButtonType.CANCEL) return;
         dao.obrisiGrad(tableViewGradovi.getSelectionModel().getSelectedItem());
+        gradovi = FXCollections.observableArrayList(dao.gradovi());
+        tableViewGradovi.setItems(gradovi);
         tableViewGradovi.refresh();
     }
 }

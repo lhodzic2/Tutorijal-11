@@ -13,7 +13,7 @@ import java.util.Scanner;
 public class GeografijaDAO {
     private static GeografijaDAO instance = null;
     private Connection conn;
-    private PreparedStatement dajGradoveUpit, dajGlavniGrad,obrisiGradoveZaDrzavu,obrisiDrzavuUpit,dajIdDrzave,dodajGrad,dodajDrzavu,izmijeniGradUpit, dajDrzavuPoIdUpit,dajDrzaveUpit,dajIdGrada,generisiIdDrzave,obrisiGrad,nadjiGrad;
+    private PreparedStatement dajGradoveUpit, dajGlavniGrad,obrisiGradoveZaDrzavu,obrisiDrzavuUpit,dajIdDrzave,dodajGrad,dodajDrzavu,izmijeniGradUpit, dajDrzavuPoIdUpit,dajDrzaveUpit,dajIdGrada,generisiIdDrzave,obrisiGrad,nadjiGrad,obrisiDrzavuZaGrad;
     private ObservableList<Drzava> drzave;
     private ObservableList<Grad> gradovi;
 
@@ -49,6 +49,7 @@ public class GeografijaDAO {
             generisiIdDrzave = conn.prepareStatement("SELECT max(id) FROM drzava");
             obrisiGrad = conn.prepareStatement("DELETE FROM grad WHERE id=?");
             nadjiGrad = conn.prepareStatement("SELECT * FROM grad WHERE naziv LIKE ?");
+            obrisiDrzavuZaGrad = conn.prepareStatement("DELETE FROM drzava WHERE glavni_grad=?");
         } catch (SQLException e) {
         }
         gradovi = FXCollections.observableArrayList(gradovi());
@@ -57,8 +58,10 @@ public class GeografijaDAO {
 
     public void obrisiGrad(Grad grad) {
         try {
+            obrisiDrzavuZaGrad.setInt(1,grad.getId());
+            obrisiDrzavuZaGrad.executeUpdate();
             obrisiGrad.setInt(1,grad.getId());
-            obrisiGrad.execute();
+            obrisiGrad.executeUpdate();
             gradovi.clear();
             gradovi = FXCollections.observableArrayList(gradovi());
         } catch (SQLException e) {
