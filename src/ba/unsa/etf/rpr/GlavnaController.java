@@ -32,7 +32,7 @@ public class GlavnaController {
     private TableColumn colGradDrzava;
     private GeografijaDAO dao = GeografijaDAO.getInstance();
     private ObservableList<Grad> gradovi = dao.getGradovi();
-    private ObservableList<Drzava> drzave = dao.drzave();
+    private ObservableList<Drzava> drzave = dao.getDrzave();
 
     public void initialize() {
         colGradId.setCellValueFactory(new PropertyValueFactory<Grad,Integer>("id"));
@@ -40,12 +40,6 @@ public class GlavnaController {
         colGradStanovnika.setCellValueFactory(new PropertyValueFactory<Grad,Integer>("brojStanovnika"));
         colGradDrzava.setCellValueFactory(new PropertyValueFactory<Grad,Drzava>("drzava"));
         tableViewGradovi.setItems(gradovi);
-        gradovi.addListener((ListChangeListener<Grad>) l -> {
-                    gradovi = FXCollections.observableArrayList(dao.gradovi());
-                    tableViewGradovi.setItems(gradovi);
-                    tableViewGradovi.refresh();
-                }
-            );
     }
 
     public void dodajDrzavu() throws IOException {
@@ -88,6 +82,8 @@ public class GlavnaController {
             if (g.getNaziv() == null) return;
             g.setId(id);
             dao.dodajGrad(g);
+            gradovi = dao.getGradovi();
+            tableViewGradovi.setItems(gradovi);
         });
     }
 
@@ -113,6 +109,7 @@ public class GlavnaController {
             dao.izmijeniGrad(g);
 //            gradovi.remove(tableViewGradovi.getSelectionModel().getSelectedItem());
 //            gradovi.add(g);
+            tableViewGradovi.setItems(dao.getGradovi());
             tableViewGradovi.getSelectionModel().select(g);
             tableViewGradovi.refresh();
         });

@@ -1,0 +1,8 @@
+
+Msquid:S3655‚"5Call "result.isPresent()" before accessing the value.(£­²Ä
+V
+squid:S899y";Do something with the "boolean" value returned by "delete".(Çì¥ðýÿÿÿÿ
+esquid:S4042y"IUse "java.nio.Files#delete" here for better messages on error conditions.(Çì¥ðýÿÿÿÿ
+fsquid:UselessImportCheck"BRemove this unused import 'javafx.collections.ListChangeListener'.(šê ƒ
+Nsquid:S1172}"2Remove this unused method parameter "actionEvent".(Êâ¹¯øÿÿÿÿ
+bsquid:CommentedOutCodeLinen"<This block of commented-out lines of code should be removed.(Í“½Ê

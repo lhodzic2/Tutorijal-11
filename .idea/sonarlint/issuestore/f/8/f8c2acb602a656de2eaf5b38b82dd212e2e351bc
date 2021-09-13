@@ -1,0 +1,55 @@
+
+dsquid:S2095Ê"GUse try-with-resources or close this "ResultSet" in a "finally" clause.(¹¾ò¨ıÿÿÿÿ
+Jsquid:S1659".Declare "obrisiDrzavuUpit" on a separate line.(æˆÿûüÿÿÿÿ
+_squid:S2095Ø"GUse try-with-resources or close this "ResultSet" in a "finally" clause.(Ş É¾
+@squid:S1148á"#Use a logger to log this exception.(€ÉÔ…ıÿÿÿÿ
+4squid:S1643"Use a StringBuilder instead.(Û³­Ú
+?squid:S1148*"#Use a logger to log this exception.(€ÉÔ…ıÿÿÿÿ
+@squid:S1148–"#Use a logger to log this exception.(€ÉÔ…ıÿÿÿÿ
+@squid:S1148Ğ"#Use a logger to log this exception.(€ÉÔ…ıÿÿÿÿ
+Csquid:S1659"'Declare "nadjiGrad" on a separate line.(æˆÿûüÿÿÿÿ
+?squid:S1148w"#Use a logger to log this exception.(€ÉÔ…ıÿÿÿÿ
+@squid:S1148¡"#Use a logger to log this exception.(€ÉÔ…ıÿÿÿÿ
+^squid:S2095"GUse try-with-resources or close this "ResultSet" in a "finally" clause.(î¥Èõ
+@squid:S1148„"#Use a logger to log this exception.(€ÉÔ…ıÿÿÿÿ
+csquid:CommentedOutCodeLineù"<This block of commented-out lines of code should be removed.(İ“¦¿
+Gsquid:S1659"+Declare "dajGlavniGrad" on a separate line.(æˆÿûüÿÿÿÿ
+^squid:S2095i"GUse try-with-resources or close this "ResultSet" in a "finally" clause.(­üÃ¢
+?squid:S1148l"#Use a logger to log this exception.(€ÉÔ…ıÿÿÿÿ
+Ksquid:S1659"/Declare "dajDrzavuPoIdUpit" on a separate line.(æˆÿûüÿÿÿÿ
+@squid:S1148ı"#Use a logger to log this exception.(€ÉÔ…ıÿÿÿÿ
+dsquid:S2095’"GUse try-with-resources or close this "Statement" in a "finally" clause.(¬ÿÂìøÿÿÿÿ
+Csquid:S1659"'Declare "dodajGrad" on a separate line.(æˆÿûüÿÿÿÿ
+@squid:S1148˜"#Use a logger to log this exception.(€ÉÔ…ıÿÿÿÿ
+@squid:S1148¬"#Use a logger to log this exception.(€ÉÔ…ıÿÿÿÿ
+Zsquid:S1155}">Use isEmpty() to check whether the collection is empty or not.(–‰¬õúÿÿÿÿ
+squid:S1319¶"pThe return type of this method should be an interface such as "List" rather than the implementation "ArrayList".(†«œ¤øÿÿÿÿ
+Gsquid:S1659"+Declare "dajDrzaveUpit" on a separate line.(æˆÿûüÿÿÿÿ
+csquid:S2095G"GUse try-with-resources or close this "ResultSet" in a "finally" clause.(Çï´¹ıÿÿÿÿ
+bsquid:S1192I"FDefine a constant instead of duplicating this literal "naziv" 6 times.(í•€·øÿÿÿÿ
+@squid:S1148ª"#Use a logger to log this exception.(€ÉÔ…ıÿÿÿÿ
+Esquid:S1659")Declare "dajIdDrzave" on a separate line.(æˆÿûüÿÿÿÿ
+^squid:S2095t"GUse try-with-resources or close this "ResultSet" in a "finally" clause.(Ã²ÊÔ
+dsquid:S2095º"GUse try-with-resources or close this "ResultSet" in a "finally" clause.(ˆÄ‚Ñøÿÿÿÿ
+Dsquid:S1659"(Declare "dajIdGrada" on a separate line.(æˆÿûüÿÿÿÿ
+@squid:S1148ï"#Use a logger to log this exception.(€ÉÔ…ıÿÿÿÿ
+Asquid:S00108Q")Either remove or fill this block of code.(É®£
+Osquid:S1659"3Declare "obrisiGradoveZaDrzavu" on a separate line.(æˆÿûüÿÿÿÿ
+?squid:S1148b"#Use a logger to log this exception.(€ÉÔ…ıÿÿÿÿ
+Fsquid:S001082")Either remove or fill this block of code.(®¤¯îıÿÿÿÿ
+Esquid:S1659")Declare "dodajDrzavu" on a separate line.(æˆÿûüÿÿÿÿ
+Rsquid:S1141‘"5Extract this nested try block into a separate method.(¡»¢üùÿÿÿÿ
+csquid:S2095M"GUse try-with-resources or close this "ResultSet" in a "finally" clause.(¾­â¢üÿÿÿÿ
+dsquid:S2095”"GUse try-with-resources or close this "ResultSet" in a "finally" clause.(´ÚØ©ıÿÿÿÿ
+Jsquid:S1659".Declare "izmijeniGradUpit" on a separate line.(æˆÿûüÿÿÿÿ
+_squid:S2095±"GUse try-with-resources or close this "ResultSet" in a "finally" clause.(¶àÔô
+Lsquid:S1659"0Declare "obrisiDrzavuZaGrad" on a separate line.(æˆÿûüÿÿÿÿ
+@squid:S1148‹"#Use a logger to log this exception.(€ÉÔ…ıÿÿÿÿ
+@squid:S1148Á"#Use a logger to log this exception.(€ÉÔ…ıÿÿÿÿ
+Jsquid:S1659".Declare "generisiIdDrzave" on a separate line.(æˆÿûüÿÿÿÿ
+P
+squid:S106œ"9Replace this use of System.out or System.err by a logger.(†‹¶
+bsquid:CommentedOutCodeLineS"<This block of commented-out lines of code should be removed.(şïÀÑ
+gsquid:CommentedOutCodeLine_"<This block of commented-out lines of code should be removed.(Èõ¤ıÿÿÿÿ
+_squid:S2095¦"GUse try-with-resources or close this "ResultSet" in a "finally" clause.(¦Ö¹¾
+Dsquid:S1659"(Declare "obrisiGrad" on a separate line.(æˆÿûüÿÿÿÿ

@@ -1,5 +1,6 @@
 package ba.unsa.etf.rpr;
 
+import javafx.beans.property.ObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -14,10 +15,25 @@ public class GeografijaDAO {
     private static GeografijaDAO instance = null;
     private Connection conn;
     private PreparedStatement dajGradoveUpit, dajGlavniGrad,obrisiGradoveZaDrzavu,obrisiDrzavuUpit,dajIdDrzave,dodajGrad,dodajDrzavu,izmijeniGradUpit, dajDrzavuPoIdUpit,dajDrzaveUpit,dajIdGrada,generisiIdDrzave,obrisiGrad,nadjiGrad,obrisiDrzavuZaGrad;
-    private ObservableList<Drzava> drzave;
-    private ObservableList<Grad> gradovi;
+    private ObservableList<Drzava> drzave = FXCollections.observableArrayList();
+    private ObservableList<Grad> gradovi = FXCollections.observableArrayList();
+    private ObjectProperty<Grad> trenutniGrad = null;
 
+    public Grad getTrenutniGrad() {
+        return trenutniGrad.get();
+    }
 
+    public ObjectProperty<Grad> trenutniGradProperty() {
+        return trenutniGrad;
+    }
+
+    public void setTrenutniGrad(Grad trenutniGrad) {
+        this.trenutniGrad.set(trenutniGrad);
+    }
+
+    public ObservableList<Drzava> getDrzave() {
+        return drzave;
+    }
 
     private GeografijaDAO() {
         try {
@@ -36,6 +52,7 @@ public class GeografijaDAO {
             }
         }
         try {
+            //pripremanje upita
             dajDrzavuPoIdUpit = conn.prepareStatement("SELECT * FROM drzava WHERE id=?");
             dajGradoveUpit = conn.prepareStatement("SELECT * FROM grad ORDER BY broj_stanovnika DESC");
             obrisiGradoveZaDrzavu = conn.prepareStatement("DELETE FROM grad WHERE drzava = ?");
@@ -50,10 +67,22 @@ public class GeografijaDAO {
             obrisiGrad = conn.prepareStatement("DELETE FROM grad WHERE id=?");
             nadjiGrad = conn.prepareStatement("SELECT * FROM grad WHERE naziv LIKE ?");
             obrisiDrzavuZaGrad = conn.prepareStatement("DELETE FROM drzava WHERE glavni_grad=?");
+            //inicijalizacija listi
+            ResultSet gr = dajGradoveUpit.executeQuery();
+            while(gr.next()) {
+                Grad pomocna = new Grad(gr.getInt(1),gr.getString("naziv"),gr.getInt(3),null);
+                pomocna.setDrzava(dajDrzavu(gr.getInt(4),pomocna));
+                gradovi.add(pomocna);
+            }
+            ResultSet dr = dajDrzaveUpit.executeQuery();
+            while(dr.next()) {
+                drzave.add(new Drzava(dr.getInt("id"),dr.getString("naziv"),glavniGrad(dr.getString("naziv"))));
+            }
         } catch (SQLException e) {
         }
-        gradovi = FXCollections.observableArrayList(gradovi());
-        drzave = FXCollections.observableArrayList();
+//        gradovi = FXCollections.observableArrayList(gradovi());
+//        drzave = FXCollections.observableArrayList();
+
     }
 
     public void obrisiGrad(Grad grad) {
@@ -62,8 +91,9 @@ public class GeografijaDAO {
             obrisiDrzavuZaGrad.executeUpdate();
             obrisiGrad.setInt(1,grad.getId());
             obrisiGrad.executeUpdate();
-            gradovi.clear();
-            gradovi = FXCollections.observableArrayList(gradovi());
+            gradovi.remove(grad);
+//            gradovi.clear();
+//            gradovi = FXCollections.observableArrayList(gradovi());
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -216,8 +246,9 @@ public class GeografijaDAO {
             dodajDrzavu.setString(2,drzava.getNaziv());
             dodajDrzavu.setInt(3,drzava.getGlavniGrad().getId());
             dodajDrzavu.execute();
-            drzave.clear();
-            drzave = drzave();
+//            drzave.clear();
+//            drzave = drzave();
+            drzave.add(drzava);
         } catch (SQLException e) {
             e.printStackTrace();
         }
